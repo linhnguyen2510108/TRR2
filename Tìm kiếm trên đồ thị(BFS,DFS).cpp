@@ -27,6 +27,7 @@ void bfs(int u)
 	while(!q.empty())
 	{
 		int x=q.front();
+		q.pop();
 		for(auto l:adj[x])
 		{
 			if(!visited[l])
@@ -76,9 +77,6 @@ int main()
 		for(int i=0;i<101;i++) adj[i].clear();
 		cin>>n>>m>>u>>v;
 		// nhap do thi theo de cho 
-		dfs(u);
-		bfs(u);
-		path(u,v);
-		TPLT();
+		// sử dụng hàm tùy yêu cầu đề bài
 	}
 }
