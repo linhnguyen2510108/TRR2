@@ -52,7 +52,7 @@ int main()
 	{
 		if(visited[i]==0)
 		{
-			cnt++; bfs(i);
+			cnt++; bfs(i);//dfs(i)
 		}
 	}
 	for(int i=1;i<=n;i++)
@@ -64,7 +64,7 @@ int main()
 	{
 		if(visited[j]==0)
 		{
-			cnt1++; bfs(j);
+			cnt1++; bfs(j);//dfs(j)
 		}
 	}
 	if(cnt1>cnt)
