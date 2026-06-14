@@ -1,42 +1,39 @@
 #include<bits/stdc++.h>
 using namespace std;
-set<int>adj[101];
-vector<int>ke[101];
-vector<int>EC;
-stack<int>st;
-int n,a[101][101],deg[101],visited[101],cnt=0;
-ifstream in("CT.INP");
-ofstream out("CT.OUT");
+vector<int>adj[101];
+int visited[101]={0};
 void dfs(int x)
 {
 	visited[x]=1;
-	for(auto k:ke[x])
+	for(auto k:adj[x])
 	{
 		if(visited[k]==0) dfs(k);
 	}
 }
-void euler(int x)
+queue<int>q;
+void bfs(int x)
 {
-	st.push(x);
-	while(!st.empty())
+	q.push(x);visited[x]=1;
+	while(!q.empty())
 	{
-		int top=st.top();
-		if(adj[top].size()!=0)
+		int top=q.front();
+		q.pop();
+		for(auto k:adj[top])
 		{
-			int y=*adj[top].begin();
-			st.push(y);
-			adj[top].erase(y);
-			adj[y].erase(top);
-		}
-		else{
-			st.pop();
-			EC.push_back(top);
+			if(!visited[k])
+			{
+				visited[k]=1;
+				q.push(k);
+			}
 		}
 	}
-	reverse(EC.begin(),EC.end());
 }
-void nhap()
+int main()
 {
+	ifstream in("TK.INP");
+	ofstream out("TK.OUT");
+	int n; in>>n;
+	int a[101][101];
 	for(int i=1;i<=n;i++)
 	{
 		for(int j=1;j<=n;j++)
@@ -44,46 +41,37 @@ void nhap()
 			in>>a[i][j];
 			if(a[i][j]&&i<j)
 			{
-				deg[i]++;deg[j]++;
-				adj[i].insert(j);
-				adj[j].insert(i);
-				ke[i].push_back(j);
-				ke[j].push_back(i);
+				adj[i].push_back(j);
+				adj[j].push_back(i);
 			}
 		}
 	}
-}
-int main()
-{
-	int t;in>>t;
-	if(t==1)
+	int cnt=0,dem=0;
+	vector<int>ans;
+	for(int i=1;i<=n;i++)
 	{
-		in>>n;
-		nhap();
-		for(int i=1;i<=n;i++)
+		if(visited[i]==0)
 		{
-			if(visited[i]==0&&deg[i]>0)
-			{
-				cnt++;dfs(i);
-			}
+			cnt++; bfs(i);
 		}
-		if(cnt>1) {out<<"0";return 0;}
-		int dem=0;
-		for(int i=1;i<=n;i++)
+	}
+	for(int i=1;i<=n;i++)
+	{
+		memset(visited,0,sizeof(visited));
+		visited[i]=1;
+		int cnt1=0;
+		for(int j=1;j<=n;j++)
+	{
+		if(visited[j]==0)
 		{
-			if(deg[i]%2!=0)
-			{
-				dem++;
-			}
+			cnt1++; bfs(j);
 		}
-		if(dem==2) out<<"2";
-		else if(dem==0) out<<"1";
-		else out<<"0";
 	}
-	else{
-		int u;in>>n>>u;
-		nhap();
-		euler(u);
-		for(auto x:EC) out<<x<<" ";
+	if(cnt1>cnt)
+	{
+		dem++;ans.push_back(i);
 	}
+	}
+	out<<dem<<endl;
+	for(auto x:ans) out<<x<<" ";
 }
